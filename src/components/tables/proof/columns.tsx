@@ -2,8 +2,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./ColumnHeader";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
-import { OffRamps } from "@/types";
 import { formatNullableAddress, formatNullableData, formatNullableTimestamp } from "@/lib/utils";
+import { TaskResponded } from "@/types";
 
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text).then(() => {
@@ -13,7 +13,7 @@ const copyToClipboard = (text: string) => {
   });
 };
 
-export function columns(): ColumnDef<OffRamps>[] {
+export function columns(): ColumnDef<TaskResponded>[] {
   return [
     {
       id: "number",
@@ -27,52 +27,19 @@ export function columns(): ColumnDef<OffRamps>[] {
       enableSorting: false,
     },
     {
-      accessorKey: "id",
+      accessorKey: "receiver",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="ID"
+          title="Receiver"
         />
       ),
       cell: ({ row }) => (
         <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatNullableAddress(row.original.id)}</span>
-          {row.original.id && (
+          <span className="mr-2">{formatNullableAddress(row.original.receiver)}</span>
+          {row.original.receiver && (
             <button
-              onClick={() => copyToClipboard(row.original.id)}
-              aria-label="Copy to clipboard"
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
-            >
-              <Copy size={16} />
-            </button>
-          )}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "blockTimestamp",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Block Timestamp"
-        />
-      ),
-      cell: ({ row }) => <div>{formatNullableTimestamp(row.original.blockTimestamp)}</div>,
-    },
-    {
-      accessorKey: "user",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="User"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatNullableAddress(row.original.user)}</span>
-          {row.original.user && (
-            <button
-              onClick={() => copyToClipboard(row.original.user)}
+              onClick={() => copyToClipboard(row.original.receiver)}
               aria-label="Copy to clipboard"
               className="text-gray-500 hover:text-gray-700 focus:outline-none"
             >
@@ -116,59 +83,6 @@ export function columns(): ColumnDef<OffRamps>[] {
       ),
     },
     {
-      accessorKey: "requestedAmount",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Requested Amount"
-        />
-      ),
-      cell: ({ row }) => <div>{formatNullableData(row.original.requestedAmount)}</div>,
-    },
-    {
-      accessorKey: "requestedAmountRealWorld",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Real World Amount"
-        />
-      ),
-      cell: ({ row }) => <div>{formatNullableData(row.original.requestedAmountRealWorld)}</div>,
-    },
-    {
-      accessorKey: "blockNumber",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Block Number"
-        />
-      ),
-      cell: ({ row }) => <div>{formatNullableData(row.original.blockNumber)}</div>,
-    },
-    {
-      accessorKey: "channelAccount",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Channel Account"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatNullableAddress(row.original.channelAccount)}</span>
-          {row.original.channelAccount && (
-            <button
-              onClick={() => copyToClipboard(row.original.channelAccount)}
-              aria-label="Copy to clipboard"
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
-            >
-              <Copy size={16} />
-            </button>
-          )}
-        </div>
-      ),
-    },
-    {
       accessorKey: "channelId",
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -178,7 +92,7 @@ export function columns(): ColumnDef<OffRamps>[] {
       ),
       cell: ({ row }) => (
         <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatNullableAddress(row.original.channelId)}</span>
+          <span className="mr-2">{formatNullableAddress(row.original.channelId).toUpperCase()}</span>
           {row.original.channelId && (
             <button
               onClick={() => copyToClipboard(row.original.channelId)}
@@ -192,116 +106,24 @@ export function columns(): ColumnDef<OffRamps>[] {
       ),
     },
     {
-      accessorKey: "fillBlockNumber",
+      accessorKey: "createdAt",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Fill Block Number"
+          title="Created At"
         />
       ),
-      cell: ({ row }) => <div>{formatNullableData(row.original.fillBlockNumber)}</div>,
+      cell: ({ row }) => <div>{formatNullableTimestamp(row.original.createdAt)}</div>,
     },
     {
-      accessorKey: "fillBlockTimestamp",
+      accessorKey: "respondedAt",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title="Fill Block Timestamp"
+          title="Responded At"
         />
       ),
-      cell: ({ row }) => <div>{formatNullableTimestamp(row.original.fillBlockTimestamp)}</div>,
-    },
-    {
-      accessorKey: "fillTransactionHash",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Fill Transaction Hash"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatNullableAddress(row.original.fillTransactionHash)}</span>
-          {row.original.fillTransactionHash && (
-            <button
-              onClick={() => copyToClipboard(row.original.fillTransactionHash)}
-              aria-label="Copy to clipboard"
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
-            >
-              <Copy size={16} />
-            </button>
-          )}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "proof",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Proof"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatNullableAddress(row.original.proof)}</span>
-          {row.original.proof && (
-            <button
-              onClick={() => copyToClipboard(row.original.proof)}
-              aria-label="Copy to clipboard"
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
-            >
-              <Copy size={16} />
-            </button>
-          )}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "receiver",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Receiver"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatNullableAddress(row.original.receiver)}</span>
-          {row.original.receiver && (
-            <button
-              onClick={() => copyToClipboard(row.original.receiver)}
-              aria-label="Copy to clipboard"
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
-            >
-              <Copy size={16} />
-            </button>
-          )}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "reclaimProof",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Reclaim Proof"
-        />
-      ),
-      cell: ({ row }) => (
-        <div className="flex items-center truncate w-fit justify-between">
-          <span className="mr-2">{formatNullableAddress(row.original.reclaimProof)}</span>
-          {row.original.reclaimProof && (
-            <button
-              onClick={() => copyToClipboard(row.original.reclaimProof)}
-              aria-label="Copy to clipboard"
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
-            >
-              <Copy size={16} />
-            </button>
-          )}
-        </div>
-      ),
+      cell: ({ row }) => <div>{formatNullableTimestamp(row.original.respondedAt)}</div>,
     },
   ];
 }
